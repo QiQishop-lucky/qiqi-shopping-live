@@ -189,14 +189,13 @@
 </div>
 
 <script>
-    // 綁定妳的專屬分潤基底 Worker 與妳提供的最新短轉址
-    const BASE_WORKER_URL = 'https://shopee.ping01070107.workers.dev'; 
+    // 直接綁定妳的一人五張九折券專屬推廣短網址（完全跳過有問題的 Worker 機制）
     const MY_TRACKING_URL = 'https://s.shopee.tw/7fXFrPd2c3';
 
     function getUrls() {
         const text = document.getElementById('inputLink').value;
-        // 增強型正規表達式：精準抓取包含 shopee.tw、shp..ee、s.shopee.tw 的所有網址，自動剔除前後中文字
-        const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
+        // 正規表達式：精準抓取所有蝦皮連結
+        const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee|s\.shopee\.tw)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
         return text.match(regex) || [];
     }
 
@@ -229,9 +228,9 @@
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 完美路徑結構：透過妳的 Worker 作為轉跳起點，並精準夾帶妳的專屬推廣連結與商品原網址
-            // 這樣在經由伺服器重定向時，能百分之百觸發分潤機制，順利開啟蝦皮跳出券！
-            let finalLink = `${BASE_WORKER_URL}?url=${encodeURIComponent(originalUrl)}&target=${encodeURIComponent(MY_TRACKING_URL)}&sub_id1=qiqishop&sub_id2=qiqi&sub_id3=ping0107`;
+            // 蝦皮官方標準拼接：利用妳本身就帶有九折券的網址，後面直接附帶目標商品的參數
+            // 這樣使用者點擊時，既能被算在妳的 qiqishop 分潤下，又能在開App時跳出五張券，並且導向該商品！
+            let finalLink = `${MY_TRACKING_URL}?url=${encodeURIComponent(originalUrl)}`;
 
             // 建立亮黃色小熊風格商品連結按鈕
             const a = document.createElement('a');
