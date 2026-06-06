@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 QiQi好物 | 推廣卷自動轉換器 🍀</title>
+    <title>🧸 祺祺好物 | 小熊幸運草自動轉換器 🍀</title>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -19,15 +19,15 @@
         .container { 
             background: #ffffff; 
             padding: 30px; 
-            border-radius: 24px; /* 更圓潤的可愛風 border-radius */
+            border-radius: 24px; 
             box-shadow: 0 8px 24px rgba(222, 184, 135, 0.2); 
             width: 100%; 
             max-width: 450px; 
             text-align: center;
-            border: 2px solid #fce8b2; /* 淡淡的奶油黃邊框 */
+            border: 2px solid #fce8b2; 
         }
         h2 { 
-            color: #b27a30; /* 溫暖的焦糖棕色字體 */
+            color: #b27a30; /* 溫暖的焦糖棕色 */
             margin: 0 0 8px 0; 
             font-size: 22px; 
             font-weight: bold; 
@@ -57,7 +57,7 @@
             background-color: #fffdf9; 
         }
         textarea:focus { 
-            border-color: #ffd166; /* 聚焦時變成亮黃色 */
+            border-color: #ffd166; 
             background-color: #fff; 
             box-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
         }
@@ -65,7 +65,7 @@
             display: flex; 
             justify-content: space-between; 
             font-size: 13px; 
-            color: #60803c; /* 幸運草綠色調 */
+            color: #60803c; /* 幸運草綠 */
             margin-top: 10px; 
             padding: 0 4px; 
             font-weight: 500; 
@@ -79,10 +79,10 @@
             gap: 12px; 
             margin-top: 18px; 
         }
-        /* 主黃色按鈕 */
+        /* 黃色主要按鈕 */
         .btn-main { 
             background-color: #ffd166; 
-            color: #6b4d24; /* 深焦糖色字體 */
+            color: #6b4d24; 
             border: none; 
             padding: 14px; 
             flex: 2; 
@@ -97,8 +97,12 @@
             background-color: #ffca47; 
             transform: translateY(-1px);
         }
-        .btn-main:active {
-            transform: translateY(1px);
+        .btn-main:disabled {
+            background-color: #ffe8b3;
+            color: #a6927e;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         .btn-clear { 
             background-color: #f5eedc; 
@@ -115,12 +119,20 @@
         .btn-clear:hover { 
             background-color: #ebdcb9; 
         }
-        /* 結果框 */
+        /* 轉碼中載入提示 */
+        .loading-box {
+            display: none;
+            margin-top: 15px;
+            color: #b27a30;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        /* 結果方框 */
         .result-box { 
             display: none; 
             margin-top: 22px; 
             padding: 18px; 
-            background-color: #f7f9f2; /* 淡淡的幸運草綠背景 */
+            background-color: #f7f9f2; 
             border: 2px dashed #c2d6a4; 
             border-radius: 16px; 
             text-align: left; 
@@ -139,7 +151,7 @@
             flex-direction: column; 
             gap: 12px; 
         }
-        /* 產生的商品按鈕也統一為黃色與小熊風 */
+        /* 商品按鈕風格 */
         .item-btn { 
             display: flex; 
             justify-content: space-between; 
@@ -172,7 +184,7 @@
 
 <div class="container">
     <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
-    <div class="subtitle">貼上蝦皮網址，自動轉換為妳的專屬分潤連結</div>
+    <div class="subtitle">貼上蝦皮網址，跑路徑迴圈抓取專屬折價券</div>
     
     <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...（一次最多 5 個，一行一個）" oninput="updateCount()"></textarea>
     
@@ -182,9 +194,12 @@
     </div>
 
     <div class="btn-group">
-        <button class="btn-main" onclick="convertLinks()">🍀 產生轉換連結 🧸</button>
+        <button class="btn-main" id="submitBtn" onclick="convertLinks()">🍀 產生轉換連結 🧸</button>
         <button class="btn-clear" onclick="clearAll()">清除</button>
     </div>
+
+    <!-- 繞道轉碼中的提示 -->
+    <div class="loading-box" id="loadingBox">🔄 幸運草小熊正在努力通訊繞道中，請稍候...</div>
 
     <div class="result-box" id="resultBox">
         <div class="result-title" id="resultTitle">🍀 成功產生 0 個購買連結</div>
@@ -193,12 +208,11 @@
 </div>
 
 <script>
-    // ✅ 這裡已經替換成妳指定的最新分潤推廣網址囉！
+    // 妳的 Worker 基底網址
     const BASE_WORKER_URL = 'https://shopee.ping01070107.workers.dev'; 
 
     function getUrls() {
         const text = document.getElementById('inputLink').value;
-        // 偵測輸入框中所有的蝦皮長、短網址
         const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s]+)/g;
         return text.match(regex) || [];
     }
@@ -215,37 +229,70 @@
         }
     }
 
-    function convertLinks() {
+    // 使用 async/await 讓程式碼可以發送後端請求，實現「等待繞道」的效果
+    async function convertLinks() {
         const urls = getUrls();
         const resultBox = document.getElementById('resultBox');
         const linkList = document.getElementById('linkList');
         const resultTitle = document.getElementById('resultTitle');
+        const loadingBox = document.getElementById('loadingBox');
+        const submitBtn = document.getElementById('submitBtn');
 
         if (urls.length === 0) {
             alert('請先貼上有效的蝦皮商品網址喔！🧸');
             return;
         }
 
-        // 限制最多 5 個連結
-        const maxLinks = Math.min(urls.length, 5);
+        // 顯示載入中、禁用按鈕
+        loadingBox.style.display = 'block';
+        resultBox.style.display = 'none';
+        submitBtn.disabled = true;
         linkList.innerHTML = '';
         
+        const maxLinks = Math.min(urls.length, 5);
+        let successCount = 0;
+
+        // 用迴圈逐一向 Worker 跑對應，確保順利繞道拿到蝦皮分潤網址
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 修正為新提供的網址格式（後方直接帶入蝦皮商品原網址）
-            let finalLink = `${BASE_WORKER_URL}?url=${encodeURIComponent(originalUrl)}`;
+            // 拼接請求妳的 Worker 的 API 網址
+            let targetApi = `${BASE_WORKER_URL}?url=${encodeURIComponent(originalUrl)}`;
 
-            // 動態建立精美的小熊幸運草風格商品按鈕
-            const a = document.createElement('a');
-            a.href = finalLink;
-            a.className = 'item-btn';
-            a.target = '_blank';
-            a.innerHTML = `<span>🧸 商品連結 ${i + 1} 🍀</span> <span class="go-text">前往購買 →</span>`;
-            linkList.appendChild(a);
+            try {
+                // 模擬繞道獲取最終跳轉網址
+                // 這裡會真正 fetch 妳的 Worker，獲取回傳的跳轉目標（如果 Worker 是做 Redirect，則拿 response.url）
+                let response = await fetch(targetApi, { method: 'GET', redirect: 'follow' });
+                
+                // 取得對應回蝦皮伺服器後、帶有券與分潤 ID 的最終網址
+                let finalLink = response.url || targetApi;
+
+                // 建立精美商品按鈕
+                const a = document.createElement('a');
+                a.href = finalLink;
+                a.className = 'item-btn';
+                a.target = '_blank';
+                a.innerHTML = `<span>🧸 商品連結 ${i + 1} 🍀</span> <span class="go-text">前往購買 →</span>`;
+                linkList.appendChild(a);
+                successCount++;
+            } catch (error) {
+                console.error("轉碼失敗:", error);
+                // 萬一 Worker 擋 CORS 跨網域，則降級採用直接攜帶參數的網址形式，確保按鈕依然按得通
+                const a = document.createElement('a');
+                a.href = targetApi;
+                a.className = 'item-btn';
+                a.target = '_blank';
+                a.innerHTML = `<span>🧸 商品連結 ${i + 1} (備用) 🍀</span> <span class="go-text">前往購買 →</span>`;
+                linkList.appendChild(a);
+                successCount++;
+            }
         }
 
-        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個購買連結 ✨`;
+        // 隱藏載入提示，打開結果
+        loadingBox.style.display = 'none';
+        submitBtn.disabled = false;
+        
+        resultTitle.innerText = `✨ 成功產生 ${successCount} 個分潤購買連結 ✨`;
         resultBox.style.display = 'block';
     }
 
@@ -253,6 +300,7 @@
         document.getElementById('inputLink').value = '';
         document.getElementById('resultBox').style.display = 'none';
         document.getElementById('linkList').innerHTML = '';
+        document.getElementById('loadingBox').style.display = 'none';
         updateCount();
     }
 </script>
