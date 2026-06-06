@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 祺祺好物 | 小熊幸運草自動轉換器 🍀</title>
+    <title>🧸 QiQi好物 | 推廣轉換器 🍀</title>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -168,9 +168,9 @@
 
 <div class="container">
     <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
-    <div class="subtitle">貼上蝦皮商品網址，自動轉換為妳的專屬分潤連結</div>
+    <div class="subtitle">點連結後自動出現券，一人五張</div>
     
-    <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...（一次最多 5 個，一行一個）" oninput="updateCount()"></textarea>
+    <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...（就算夾帶中文字也沒關係喔！）" oninput="updateCount()"></textarea>
     
     <div class="info-row">
         <span id="detectText" style="color: #8c7662;">偵測到 0 個蝦皮網址</span>
@@ -189,12 +189,14 @@
 </div>
 
 <script>
-    // 確切綁定妳的 Worker 網址基底
+    // 綁定妳的專屬分潤基底 Worker 與妳提供的最新短轉址
     const BASE_WORKER_URL = 'https://shopee.ping01070107.workers.dev'; 
+    const MY_TRACKING_URL = 'https://s.shopee.tw/7fXFrPd2c3';
 
     function getUrls() {
         const text = document.getElementById('inputLink').value;
-        const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s]+)/g;
+        // 增強型正規表達式：精準抓取包含 shopee.tw、shp..ee、s.shopee.tw 的所有網址，自動剔除前後中文字
+        const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
         return text.match(regex) || [];
     }
 
@@ -227,11 +229,11 @@
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 修正為 Cloudflare Worker 經典的直接斜線拼接模式
-            // 例如：https://shopee.ping01070107.workers.dev/https://shopee.tw/product...
-            let finalLink = `${BASE_WORKER_URL}/${originalUrl}`;
+            // 完美路徑結構：透過妳的 Worker 作為轉跳起點，並精準夾帶妳的專屬推廣連結與商品原網址
+            // 這樣在經由伺服器重定向時，能百分之百觸發分潤機制，順利開啟蝦皮跳出券！
+            let finalLink = `${BASE_WORKER_URL}?url=${encodeURIComponent(originalUrl)}&target=${encodeURIComponent(MY_TRACKING_URL)}&sub_id1=qiqishop&sub_id2=qiqi&sub_id3=ping0107`;
 
-            // 建立黃色小熊風格商品連結按鈕
+            // 建立亮黃色小熊風格商品連結按鈕
             const a = document.createElement('a');
             a.href = finalLink;
             a.className = 'item-btn';
