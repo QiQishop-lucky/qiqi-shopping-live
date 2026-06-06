@@ -3,57 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🍀 QiQi好物 | 蝦皮推廣卷 </title>
+    <title>🧸 祺祺好物 | 小熊幸運草自動轉換器 🍀</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f7f9fc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-        .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); width: 100%; max-width: 450px; text-align: center; }
-        h2 { color: #333; margin: 0 0 8px 0; font-size: 22px; font-weight: bold; }
-        .subtitle { color: #666; font-size: 14px; margin-bottom: 25px; line-height: 1.5; }
-        textarea { width: 100%; height: 140px; padding: 15px; box-sizing: border-box; border: 1px solid #e0e0e0; border-radius: 12px; resize: none; font-size: 15px; line-height: 1.5; outline: none; transition: border 0.2s; background-color: #fafafa; }
-        textarea:focus { border-color: #004aad; background-color: #fff; }
-        .info-row { display: flex; justify-content: space-between; font-size: 13px; color: #2e7d32; margin-top: 10px; padding: 0 4px; font-weight: 500; }
-        .max-hint { color: #888; font-weight: normal; }
-        .btn-group { display: flex; gap: 12px; margin-top: 18px; }
-        .btn-main { background-color: #004aad; color: white; border: none; padding: 14px; flex: 2; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; transition: opacity 0.2s; box-shadow: 0 2px 8px rgba(0,74,173,0.2); }
-        .btn-clear { background-color: #f1f3f4; color: #5f6368; border: none; padding: 14px; flex: 1; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background 0.2s; }
-        .btn-main:hover { opacity: 0.9; }
-        .btn-clear:hover { background-color: #e8eaed; }
-        .result-box { display: none; margin-top: 22px; padding: 18px; background-color: #f4fbf7; border: 1px solid #d1e7dd; border-radius: 12px; text-align: left; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        .result-title { color: #0f5132; font-weight: bold; margin-bottom: 14px; font-size: 15px; display: flex; align-items: center; gap: 5px; }
-        .link-list { display: flex; flex-direction: column; gap: 12px; }
-        .item-btn { display: flex; justify-content: space-between; align-items: center; background-color: #bcdcfa; color: #004aad; text-decoration: none; padding: 14px 18px; border-radius: 10px; font-weight: bold; font-size: 15px; transition: transform 0.1s, background 0.2s; box-shadow: 0 2px 6px rgba(188,222,250,0.3); }
-        .item-btn:hover { background-color: #a8d3f8; }
-        .item-btn:active { transform: scale(0.98); }
-        .item-btn .go-text { font-size: 13px; color: #004aad; font-weight: normal; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #fefaf0; /* 溫柔奶黃色背景 */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
+            box-sizing: border-box; 
+        }
+        .container { 
+            background: #ffffff; 
+            padding: 30px; 
+            border-radius: 24px; /* 更圓潤的可愛風 border-radius */
+            box-shadow: 0 8px 24px rgba(222, 184, 135, 0.2); 
+            width: 100%; 
+            max-width: 450px; 
+            text-align: center;
+            border: 2px solid #fce8b2; /* 淡淡的奶油黃邊框 */
+        }
+        h2 { 
+            color: #b27a30; /* 溫暖的焦糖棕色字體 */
+            margin: 0 0 8px 0; 
+            font-size: 22px; 
+            font-weight: bold; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .subtitle { 
+            color: #8c7662; 
+            font-size: 14px; 
+            margin-bottom: 25px; 
+            line-height: 1.5; 
+        }
+        textarea { 
+            width: 100%; 
+            height: 140px; 
+            padding: 15px; 
+            box-sizing: border-box; 
+            border: 2px solid #fce8b2; 
+            border-radius: 16px; 
+            resize: none; 
+            font-size: 15px; 
+            line-height: 1.5; 
+            outline: none; 
+            transition: all 0.2s; 
+            background-color: #fffdf9; 
+        }
+        textarea:focus { 
+            border-color: #ffd166; /* 聚焦時變成亮黃色 */
+            background-color: #fff; 
+            box-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
+        }
+        .info-row { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 13px; 
+            color: #60803c; /* 幸運草綠色調 */
+            margin-top: 10px; 
+            padding: 0 4px; 
+            font-weight: 500; 
+        }
+        .max-hint { 
+            color: #a6927e; 
+            font-weight: normal; 
+        }
+        .btn-group { 
+            display: flex; 
+            gap: 12px; 
+            margin-top: 18px; 
+        }
+        /* 主黃色按鈕 */
+        .btn-main { 
+            background-color: #ffd166; 
+            color: #6b4d24; /* 深焦糖色字體 */
+            border: none; 
+            padding: 14px; 
+            flex: 2; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold; 
+            transition: all 0.2s; 
+            box-shadow: 0 4px 10px rgba(255, 209, 102, 0.3); 
+        }
+        .btn-main:hover { 
+            background-color: #ffca47; 
+            transform: translateY(-1px);
+        }
+        .btn-main:active {
+            transform: translateY(1px);
+        }
+        .btn-clear { 
+            background-color: #f5eedc; 
+            color: #8c7662; 
+            border: none; 
+            padding: 14px; 
+            flex: 1; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold; 
+            transition: background 0.2s; 
+        }
+        .btn-clear:hover { 
+            background-color: #ebdcb9; 
+        }
+        /* 結果框 */
+        .result-box { 
+            display: none; 
+            margin-top: 22px; 
+            padding: 18px; 
+            background-color: #f7f9f2; /* 淡淡的幸運草綠背景 */
+            border: 2px dashed #c2d6a4; 
+            border-radius: 16px; 
+            text-align: left; 
+        }
+        .result-title { 
+            color: #4a662f; 
+            font-weight: bold; 
+            margin-bottom: 14px; 
+            font-size: 15px; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+        }
+        .link-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+        }
+        /* 產生的商品按鈕也統一為黃色與小熊風 */
+        .item-btn { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background-color: #fff3d1; 
+            color: #7a582c; 
+            text-decoration: none; 
+            padding: 14px 18px; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            font-size: 15px; 
+            transition: transform 0.1s, background 0.2s; 
+            border: 1px solid #fce8b2;
+            box-shadow: 0 2px 6px rgba(255, 243, 209, 0.5); 
+        }
+        .item-btn:hover { 
+            background-color: #ffeaa7; 
+        }
+        .item-btn:active { 
+            transform: scale(0.98); 
+        }
+        .item-btn .go-text { 
+            font-size: 13px; 
+            color: #b27a30; 
+            font-weight: bold; 
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>✨ 蝦皮推廣券自動轉換器</h2>
-    <div class="subtitle">點連結後自動出現券，一人五張</div>
+    <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
+    <div class="subtitle">貼上蝦皮網址，自動轉換為妳的專屬分潤連結</div>
     
     <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...（一次最多 5 個，一行一個）" oninput="updateCount()"></textarea>
     
     <div class="info-row">
-        <span id="detectText" style="color: #666;">偵測到 0 個蝦皮網址</span>
-        <span class="max-hint">一次最多 5 個</span>
+        <span id="detectText" style="color: #8c7662;">偵測到 0 個蝦皮網址</span>
+        <span class="max-hint">一次最多 5 個 🐾</span>
     </div>
 
     <div class="btn-group">
-        <button class="btn-main" onclick="convertLinks()">產生連結</button>
+        <button class="btn-main" onclick="convertLinks()">🍀 產生轉換連結 🧸</button>
         <button class="btn-clear" onclick="clearAll()">清除</button>
     </div>
 
     <div class="result-box" id="resultBox">
-        <div class="result-title" id="resultTitle">✅ 成功產生 0 個購買連結</div>
+        <div class="result-title" id="resultTitle">🍀 成功產生 0 個購買連結</div>
         <div class="link-list" id="linkList"></div>
     </div>
 </div>
 
 <script>
-    // ✅ 這裡已經幫妳寫好妳的專屬推廣碼了！
-    const MY_AFFILIATE_ID = 'ALV-YPM-YYG'; 
+    // ✅ 這裡已經替換成妳指定的最新分潤推廣網址囉！
+    const BASE_WORKER_URL = 'https://shopee.ping01070107.workers.dev'; 
 
     function getUrls() {
         const text = document.getElementById('inputLink').value;
@@ -66,11 +207,11 @@
         const urls = getUrls();
         const detectText = document.getElementById('detectText');
         if (urls.length > 0) {
-            detectText.innerText = `偵測到 ${urls.length} 個蝦皮網址 ✔`;
-            detectText.style.color = '#2e7d32';
+            detectText.innerText = `偵測到 ${urls.length} 個蝦皮網址 🍀`;
+            detectText.style.color = '#60803c';
         } else {
             detectText.innerText = `偵測到 0 個蝦皮網址`;
-            detectText.style.color = '#666';
+            detectText.style.color = '#8c7662';
         }
     }
 
@@ -81,7 +222,7 @@
         const resultTitle = document.getElementById('resultTitle');
 
         if (urls.length === 0) {
-            alert('請先貼上有效的蝦皮商品網址喔！');
+            alert('請先貼上有效的蝦皮商品網址喔！🧸');
             return;
         }
 
@@ -92,19 +233,19 @@
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 針對短網址或一般網址拼接成帶有妳推廣碼的分潤格式
-            let finalLink = `https://shopee.tw/universal-link?redir=${encodeURIComponent(originalUrl)}&utm_source=affiliate&utm_medium=bindings&utm_campaign=${MY_AFFILIATE_ID}`;
+            // 修正為新提供的網址格式（後方直接帶入蝦皮商品原網址）
+            let finalLink = `${BASE_WORKER_URL}?url=${encodeURIComponent(originalUrl)}`;
 
-            // 動態建立精美的商品按鈕
+            // 動態建立精美的小熊幸運草風格商品按鈕
             const a = document.createElement('a');
             a.href = finalLink;
             a.className = 'item-btn';
             a.target = '_blank';
-            a.innerHTML = `<span>🛒 商品 ${i + 1}</span> <span class="go-text">前往購買 →</span>`;
+            a.innerHTML = `<span>🧸 商品連結 ${i + 1} 🍀</span> <span class="go-text">前往購買 →</span>`;
             linkList.appendChild(a);
         }
 
-        resultTitle.innerText = `✅ 成功產生 ${maxLinks} 個購買連結`;
+        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個購買連結 ✨`;
         resultBox.style.display = 'block';
     }
 
