@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 QiQi好物 | 推廣卷轉換器 🍀</title>
+    <title>🧸 祺祺好物 | 小熊幸運草自動轉換器 🍀</title>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -79,7 +79,7 @@
             gap: 12px; 
             margin-top: 18px; 
         }
-        /* 黃色主要按鈕 */
+        /* 亮黃色主要按鈕 */
         .btn-main { 
             background-color: #ffd166; 
             color: #6b4d24; 
@@ -95,10 +95,6 @@
         }
         .btn-main:hover { 
             background-color: #ffca47; 
-            transform: translateY(-1px);
-        }
-        .btn-main:active {
-            transform: translateY(1px);
         }
         .btn-clear { 
             background-color: #f5eedc; 
@@ -171,8 +167,8 @@
 <body>
 
 <div class="container">
-    <h2>🧸 ✨ QiQi好物 ✨ 🍀</h2>
-    <div class="subtitle">自動帶入專屬 Sub_id 分潤參數與折價券</div>
+    <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
+    <div class="subtitle">貼上蝦皮商品網址，自動轉換為妳的專屬分潤連結</div>
     
     <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...（一次最多 5 個，一行一個）" oninput="updateCount()"></textarea>
     
@@ -193,13 +189,8 @@
 </div>
 
 <script>
-    // 綁定妳的 Worker 基底網址
+    // 確切綁定妳的 Worker 網址基底
     const BASE_WORKER_URL = 'https://shopee.ping01070107.workers.dev'; 
-
-    // 根據妳提供的照片，帶入專屬的蝦皮自定義推廣參數
-    const SUB_ID_1 = 'qiqishop';
-    const SUB_ID_2 = 'qiqi';
-    const SUB_ID_3 = 'ping0107';
 
     function getUrls() {
         const text = document.getElementById('inputLink').value;
@@ -236,10 +227,11 @@
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 完美揉合：包含 Worker 基底、原商品網址，以及妳照片中的 3 個專屬自定義分潤標籤
-            let finalLink = `${BASE_WORKER_URL}?url=${encodeURIComponent(originalUrl)}&sub_id1=${SUB_ID_1}&sub_id2=${SUB_ID_2}&sub_id3=${SUB_ID_3}`;
+            // 修正為 Cloudflare Worker 經典的直接斜線拼接模式
+            // 例如：https://shopee.ping01070107.workers.dev/https://shopee.tw/product...
+            let finalLink = `${BASE_WORKER_URL}/${originalUrl}`;
 
-            // 建立亮黃色的小熊幸運草風格按鈕
+            // 建立黃色小熊風格商品連結按鈕
             const a = document.createElement('a');
             a.href = finalLink;
             a.className = 'item-btn';
