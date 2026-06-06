@@ -149,4 +149,110 @@
             font-size: 15px; 
             transition: transform 0.1s, background 0.2s; 
             border: 1px solid #fce8b2;
-            box-shadow: 0 2px 6px rgba(255, 243, 209, 0.
+            box-shadow: 0 2px 6px rgba(255, 243, 209, 0.5); 
+        }
+        .item-btn:hover { 
+            background-color: #ffeaa7; 
+        }
+        .item-btn:active { 
+            transform: scale(0.98); 
+        }
+        .item-btn .go-text { 
+            font-size: 13px; 
+            color: #b27a30; 
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
+    <div class="subtitle">點連結後自動出現券，一人五張</div>
+    
+    <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...（就算夾帶中文字也沒關係喔！）" oninput="updateCount()"></textarea>
+    
+    <div class="info-row">
+        <span id="detectText" style="color: #8c7662;">偵測到 0 個蝦皮網址</span>
+        <span class="max-hint">一次最多 5 個 🐾</span>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-main" onclick="convertLinks()">🍀 產生轉換連結 🧸</button>
+        <button class="btn-clear" onclick="clearAll()">清除</button>
+    </div>
+
+    <div class="result-box" id="resultBox">
+        <div class="result-title" id="resultTitle">🍀 成功產生 0 個購買連結</div>
+        <div class="link-list" id="linkList"></div>
+    </div>
+</div>
+
+<script>
+    // 重新回歸最正確的 Worker 路徑
+    const BASE_WORKER_URL = 'https://shopee.ping01070107.workers.dev'; 
+
+    function getUrls() {
+        const text = document.getElementById('inputLink').value;
+        // 正規表達式：精準抓取文字堆中所有類型的蝦皮連結
+        const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee|s\.shopee\.tw)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
+        return text.match(regex) || [];
+    }
+
+    function updateCount() {
+        const urls = getUrls();
+        const detectText = document.getElementById('detectText');
+        if (urls.length > 0) {
+            detectText.innerText = `偵測到 ${urls.length} 個蝦皮網址 🍀`;
+            detectText.style.color = '#60803c';
+        } else {
+            detectText.innerText = `偵測到 0 個蝦皮網址`;
+            detectText.style.color = '#8c7662';
+        }
+    }
+
+    function convertLinks() {
+        const urls = getUrls();
+        const resultBox = document.getElementById('resultBox');
+        const linkList = document.getElementById('linkList');
+        const resultTitle = document.getElementById('resultTitle');
+
+        if (urls.length === 0) {
+            alert('請先貼上有效的蝦皮商品網址喔！🧸');
+            return;
+        }
+
+        linkList.innerHTML = '';
+        const maxLinks = Math.min(urls.length, 5);
+        
+        for (let i = 0; i < maxLinks; i++) {
+            let originalUrl = urls[i];
+            
+            // 【核心修正】採用標準 Worker 斜線拼接模式：
+            // 例如：https://shopee.ping01070107.workers.dev/https://s.shopee.tw/7fXFrPd2c3
+            // 這樣會直接觸發妳的 Worker 後台去做短網址還原，並百分之百跳轉到蝦皮！
+            let finalLink = `${BASE_WORKER_URL}/${originalUrl}`;
+
+            // 建立奶油黃色調的小熊商品連結按鈕
+            const a = document.createElement('a');
+            a.href = finalLink;
+            a.className = 'item-btn';
+            a.target = '_blank';
+            a.innerHTML = `<span>🧸 商品連結 ${i + 1} 🍀</span> <span class="go-text">前往購買 →</span>`;
+            linkList.appendChild(a);
+        }
+
+        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個分潤購買連結 ✨`;
+        resultBox.style.display = 'block';
+    }
+
+    function clearAll() {
+        document.getElementById('inputLink').value = '';
+        document.getElementById('resultBox').style.display = 'none';
+        document.getElementById('linkList').innerHTML = '';
+        updateCount();
+    }
+</script>
+
+</body>
+</html>
