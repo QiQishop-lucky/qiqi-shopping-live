@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 祺祺好物 | 小熊幸運草自動轉換器 🍀</title>
+    <title>🧸 QiQi好物 | 小熊幸運草自動轉換器 🍀</title>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -27,7 +27,7 @@
             border: 2px solid #fce8b2; 
         }
         h2 { 
-            color: #b27a30; /* 溫暖的焦糖棕色 */
+            color: #b27a30; /* 溫暖焦糖棕 */
             margin: 0 0 8px 0; 
             font-size: 22px; 
             font-weight: bold; 
@@ -97,12 +97,8 @@
             background-color: #ffca47; 
             transform: translateY(-1px);
         }
-        .btn-main:disabled {
-            background-color: #ffe8b3;
-            color: #a6927e;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .btn-main:active {
+            transform: translateY(1px);
         }
         .btn-clear { 
             background-color: #f5eedc; 
@@ -118,14 +114,6 @@
         }
         .btn-clear:hover { 
             background-color: #ebdcb9; 
-        }
-        /* 轉碼中載入提示 */
-        .loading-box {
-            display: none;
-            margin-top: 15px;
-            color: #b27a30;
-            font-size: 14px;
-            font-weight: bold;
         }
         /* 結果方框 */
         .result-box { 
@@ -183,8 +171,8 @@
 <body>
 
 <div class="container">
-    <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
-    <div class="subtitle">貼上蝦皮網址，跑路徑迴圈抓取專屬折價券</div>
+    <h2>🧸 ✨ QiQi好物 ✨ 🍀</h2>
+    <div class="subtitle">自動帶入專屬 Sub_id 分潤參數與折價券</div>
     
     <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...（一次最多 5 個，一行一個）" oninput="updateCount()"></textarea>
     
@@ -194,12 +182,9 @@
     </div>
 
     <div class="btn-group">
-        <button class="btn-main" id="submitBtn" onclick="convertLinks()">🍀 產生轉換連結 🧸</button>
+        <button class="btn-main" onclick="convertLinks()">🍀 產生轉換連結 🧸</button>
         <button class="btn-clear" onclick="clearAll()">清除</button>
     </div>
-
-    <!-- 繞道轉碼中的提示 -->
-    <div class="loading-box" id="loadingBox">🔄 幸運草小熊正在努力通訊繞道中，請稍候...</div>
 
     <div class="result-box" id="resultBox">
         <div class="result-title" id="resultTitle">🍀 成功產生 0 個購買連結</div>
@@ -208,8 +193,13 @@
 </div>
 
 <script>
-    // 妳的 Worker 基底網址
+    // 綁定妳的 Worker 基底網址
     const BASE_WORKER_URL = 'https://shopee.ping01070107.workers.dev'; 
+
+    // 根據妳提供的照片，帶入專屬的蝦皮自定義推廣參數
+    const SUB_ID_1 = 'qiqishop';
+    const SUB_ID_2 = 'qiqi';
+    const SUB_ID_3 = 'ping0107';
 
     function getUrls() {
         const text = document.getElementById('inputLink').value;
@@ -229,70 +219,36 @@
         }
     }
 
-    // 使用 async/await 讓程式碼可以發送後端請求，實現「等待繞道」的效果
-    async function convertLinks() {
+    function convertLinks() {
         const urls = getUrls();
         const resultBox = document.getElementById('resultBox');
         const linkList = document.getElementById('linkList');
         const resultTitle = document.getElementById('resultTitle');
-        const loadingBox = document.getElementById('loadingBox');
-        const submitBtn = document.getElementById('submitBtn');
 
         if (urls.length === 0) {
             alert('請先貼上有效的蝦皮商品網址喔！🧸');
             return;
         }
 
-        // 顯示載入中、禁用按鈕
-        loadingBox.style.display = 'block';
-        resultBox.style.display = 'none';
-        submitBtn.disabled = true;
         linkList.innerHTML = '';
-        
         const maxLinks = Math.min(urls.length, 5);
-        let successCount = 0;
-
-        // 用迴圈逐一向 Worker 跑對應，確保順利繞道拿到蝦皮分潤網址
+        
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 拼接請求妳的 Worker 的 API 網址
-            let targetApi = `${BASE_WORKER_URL}?url=${encodeURIComponent(originalUrl)}`;
+            // 完美揉合：包含 Worker 基底、原商品網址，以及妳照片中的 3 個專屬自定義分潤標籤
+            let finalLink = `${BASE_WORKER_URL}?url=${encodeURIComponent(originalUrl)}&sub_id1=${SUB_ID_1}&sub_id2=${SUB_ID_2}&sub_id3=${SUB_ID_3}`;
 
-            try {
-                // 模擬繞道獲取最終跳轉網址
-                // 這裡會真正 fetch 妳的 Worker，獲取回傳的跳轉目標（如果 Worker 是做 Redirect，則拿 response.url）
-                let response = await fetch(targetApi, { method: 'GET', redirect: 'follow' });
-                
-                // 取得對應回蝦皮伺服器後、帶有券與分潤 ID 的最終網址
-                let finalLink = response.url || targetApi;
-
-                // 建立精美商品按鈕
-                const a = document.createElement('a');
-                a.href = finalLink;
-                a.className = 'item-btn';
-                a.target = '_blank';
-                a.innerHTML = `<span>🧸 商品連結 ${i + 1} 🍀</span> <span class="go-text">前往購買 →</span>`;
-                linkList.appendChild(a);
-                successCount++;
-            } catch (error) {
-                console.error("轉碼失敗:", error);
-                // 萬一 Worker 擋 CORS 跨網域，則降級採用直接攜帶參數的網址形式，確保按鈕依然按得通
-                const a = document.createElement('a');
-                a.href = targetApi;
-                a.className = 'item-btn';
-                a.target = '_blank';
-                a.innerHTML = `<span>🧸 商品連結 ${i + 1} (備用) 🍀</span> <span class="go-text">前往購買 →</span>`;
-                linkList.appendChild(a);
-                successCount++;
-            }
+            // 建立亮黃色的小熊幸運草風格按鈕
+            const a = document.createElement('a');
+            a.href = finalLink;
+            a.className = 'item-btn';
+            a.target = '_blank';
+            a.innerHTML = `<span>🧸 商品連結 ${i + 1} 🍀</span> <span class="go-text">前往購買 →</span>`;
+            linkList.appendChild(a);
         }
 
-        // 隱藏載入提示，打開結果
-        loadingBox.style.display = 'none';
-        submitBtn.disabled = false;
-        
-        resultTitle.innerText = `✨ 成功產生 ${successCount} 個分潤購買連結 ✨`;
+        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個分潤購買連結 ✨`;
         resultBox.style.display = 'block';
     }
 
@@ -300,7 +256,6 @@
         document.getElementById('inputLink').value = '';
         document.getElementById('resultBox').style.display = 'none';
         document.getElementById('linkList').innerHTML = '';
-        document.getElementById('loadingBox').style.display = 'none';
         updateCount();
     }
 </script>
