@@ -1,245 +1,159 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 QiQi專屬推廣卷轉換器 🍀</title>
-    <style>
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #fefaf0; /* 溫柔奶黃色背景 */
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 20px; 
-            box-sizing: border-box; 
-        }
-        .container { 
-            background: #ffffff; 
-            padding: 30px; 
-            border-radius: 24px; 
-            box-shadow: 0 8px 24px rgba(222, 184, 135, 0.2); 
-            width: 100%; 
-            max-width: 450px; 
-            text-align: center;
-            border: 2px solid #fce8b2; 
-        }
-        h2 { 
-            color: #b27a30; /* 溫暖焦糖棕 */
-            margin: 0 0 8px 0; 
-            font-size: 22px; 
-            font-weight: bold; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        .subtitle { 
-            color: #8c7662; 
-            font-size: 14px; 
-            margin-bottom: 25px; 
-            line-height: 1.5; 
-        }
-        .input-group {
-            text-align: left;
-            margin-bottom: 18px;
-        }
-        label {
-            font-size: 14px;
-            color: #7a582c;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-        }
-        textarea { 
-            width: 100%; 
-            height: 140px; 
-            padding: 15px; 
-            box-sizing: border-box; 
-            border: 2px solid #fce8b2; 
-            border-radius: 16px; 
-            font-size: 15px; 
-            line-height: 1.5; 
-            outline: none; 
-            transition: all 0.2s; 
-            background-color: #fffdf9; 
-            resize: none;
-        }
-        textarea:focus { 
-            border-color: #ffd166; 
-            background-color: #fff; 
-            box-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
-        }
-        .btn-group { 
-            display: flex; 
-            gap: 12px; 
-            margin-top: 22px; 
-        }
-        .btn-main { 
-            background-color: #ffd166; 
-            color: #6b4d24; 
-            border: none; 
-            padding: 14px; 
-            flex: 2; 
-            border-radius: 14px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold; 
-            transition: all 0.2s; 
-            box-shadow: 0 4px 10px rgba(255, 209, 102, 0.3); 
-        }
-        .btn-main:hover { 
-            background-color: #ffca47; 
-        }
-        .btn-clear { 
-            background-color: #f5eedc; 
-            color: #8c7662; 
-            border: none; 
-            padding: 14px; 
-            flex: 1; 
-            border-radius: 14px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold; 
-            transition: background 0.2s; 
-        }
-        .btn-clear:hover { 
-            background-color: #ebdcb9; 
-        }
-        .result-box { 
-            display: none; 
-            margin-top: 22px; 
-            padding: 18px; 
-            background-color: #f7f9f2; 
-            border: 2px dashed #c2d6a4; 
-            border-radius: 16px; 
-            text-align: left; 
-        }
-        .result-title { 
-            color: #4a662f; 
-            font-weight: bold; 
-            margin-bottom: 14px; 
-            font-size: 15px; 
-        }
-        .link-item {
-            background-color: #fff3d1;
-            border: 1px solid #fce8b2;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .link-text {
-            font-size: 13px;
-            color: #4a662f;
-            word-break: break-all;
-            background: #ffffff;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #ebdcb9;
-        }
-        .btn-copy {
-            background-color: #ffb84d;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-            align-self: flex-end;
-        }
-        .btn-copy:hover {
-            background-color: #e6a43e;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🧸 QiQi 好物分享站 🍀</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:#FFF9EC;
+}
+
+.container{
+    max-width:500px;
+    margin:auto;
+    background:#FFFFFF;
+    padding:30px;
+    border-radius:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
+
+.logo{
+    font-size:60px;
+    text-align:center;
+}
+
+h1{
+    text-align:center;
+    color:#8B5E3C;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#777;
+    margin-bottom:30px;
+    line-height:1.8;
+}
+
+.main-btn{
+    display:block;
+    text-decoration:none;
+    background:#FFD54F;
+    color:#5D4037;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:18px;
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;
+    box-shadow:0 4px 10px rgba(255,213,79,.4);
+    transition:.2s;
+}
+
+.main-btn:hover{
+    transform:translateY(-2px);
+}
+
+.card{
+    background:#FFF8E1;
+    border:2px dashed #FFD54F;
+    border-radius:18px;
+    padding:20px;
+    margin-top:20px;
+    text-align:center;
+}
+
+.card-title{
+    font-size:18px;
+    font-weight:bold;
+    color:#8B5E3C;
+    margin-bottom:10px;
+}
+
+.card-text{
+    color:#666;
+    line-height:1.8;
+}
+
+.notice{
+    margin-top:25px;
+    padding:15px;
+    background:#FFF3CD;
+    border-radius:15px;
+    color:#856404;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.footer{
+    margin-top:30px;
+    text-align:center;
+    color:#999;
+    font-size:13px;
+}
+
+</style>
 </head>
+
 <body>
 
 <div class="container">
-    <h2>🧸 QiQi專屬推廣卷轉換器 🍀</h2>
-    <div class="subtitle">輸入顧客傳來的商品網址，自動帶入 5 張九折活動券＋正確商品頁</div>
-    
-    <div class="input-group">
-        <label for="inputLink">請貼上顧客傳給妳的蝦皮商品網址 🛒</label>
-        <textarea id="inputLink" placeholder="在此貼上任何蝦皮商品連結...（就算整段對話包含中文字貼進來也找得到網址喔！）"></textarea>
-    </div>
 
-    <div class="btn-group">
-        <button class="btn-main" onclick="convertLinks()">🍀 產生轉換連結 🧸</button>
-        <button class="btn-clear" onclick="clearAll()">清除</button>
-    </div>
+<div class="logo">🧸🍀</div>
 
-    <div class="result-box" id="resultBox">
-        <div class="result-title" id="resultTitle">✨ 成功生成美亞同款二合一連結！複製後傳回給顧客：</div>
-        <div id="linkList"></div>
-    </div>
+<h1>QiQi 好物分享站</h1>
+
+<div class="subtitle">
+歡迎來到祺祺的好物天地 💛<br>
+直播推薦｜優惠分享｜好物開團
 </div>
 
-<script>
-    // 🔒 莉祺專屬：將妳最新的九折券活動識別碼死死鎖定在代碼底層
-    const QI_CAMPAIGN_CODE = '9zvAlgVHk5'; 
+<a class="main-btn"
+href="https://collshp.com/liqi0107?view=storefront"
+target="_blank">
+🛍️ 推廣清單
+</a>
 
-    function getUrls() {
-        const text = document.getElementById('inputLink').value;
-        const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
-        return text.match(regex) || [];
-    }
+<a class="main-btn"
+href="https://tw.shp.ee/5inrqtsn?smtt=0.0.9"
+target="_blank">
+🎙️ 我的直播＋短語音
+</a>
 
-    function convertLinks() {
-        const urls = getUrls();
-        const resultBox = document.getElementById('resultBox');
-        const linkList = document.getElementById('linkList');
+<div class="card">
 
-        if (urls.length === 0) {
-            alert('請先貼上有效的蝦皮商品網址喔！🛒');
-            return;
-        }
+<div class="card-title">
+🎁 推廣券轉換器
+</div>
 
-        linkList.innerHTML = '';
-        const maxLinks = Math.min(urls.length, 5);
-        
-        for (let i = 0; i < maxLinks; i++) {
-            let originalUrl = urls[i].trim();
-            
-            // 🛠️ 破解美亞同款的【蝦皮官方 Universal Link 萬用跳轉重定向公式】：
-            // 主體必須走 shopee.tw 的萬用中轉格式，並把妳的活動碼與對方的商品網址做標準網址編碼 (URL Encode)
-            let encodedProductUrl = encodeURIComponent(originalUrl);
-            
-            // 最終完美拼接公式：直通蝦皮 App 核心解析，同時完成「發券 + 跳商品」
-            let finalLink = `https://shopee.tw/universal-link/m/affiliates?smtt=3.3&url=${encodedProductUrl}&campaign_code=${QI_CAMPAIGN_CODE}`;
+<div class="card-text">
+功能升級中 🚧<br>
+API 權限申請完成後開放
+</div>
 
-            const div = document.createElement('div');
-            div.className = 'link-item';
-            div.innerHTML = `
-                <div class="link-text" id="linkText_${i}">${finalLink}</div>
-                <button class="btn-copy" onclick="copyToClipboard('linkText_${i}')">複製此連結</button>
-            `;
-            linkList.appendChild(div);
-        }
+</div>
 
-        resultBox.style.display = 'block';
-    }
+<div class="notice">
 
-    function copyToClipboard(elementId) {
-        const text = document.getElementById(elementId).innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('🎉 複製成功！快去對話框貼給顧客吧！🧸🍀');
-        }).catch(err => {
-            alert('複製失敗，請手動選取網址複製喔！');
-        });
-    }
+✨ 收藏網站不迷路<br>
+✨ 每日直播優惠更新<br>
+✨ 好物推薦持續增加<br>
+✨ 推廣券轉換器開發中
 
-    function clearAll() {
-        document.getElementById('inputLink').value = '';
-        document.getElementById('resultBox').style.display = 'none';
-        document.getElementById('linkList').innerHTML = '';
-    }
-</script>
+</div>
+
+<div class="footer">
+Made with ❤️ by QiQi
+</div>
+
+</div>
 
 </body>
 </html>
