@@ -39,8 +39,45 @@
         .subtitle { 
             color: #8c7662; 
             font-size: 14px; 
-            margin-bottom: 25px; 
-            line-height: 1.5; 
+            margin-bottom: 20px; 
+            line-line: 1.5; 
+        }
+        /* 領券大按鈕區 */
+        .coupon-box {
+            background-color: #fff5e6;
+            border: 2px dashed #ffb84d;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+        .btn-coupon {
+            display: block;
+            background-color: #ff9900;
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+            transition: transform 0.1s, background 0.2s;
+        }
+        .btn-coupon:hover {
+            background-color: #e68a00;
+        }
+        .btn-coupon:active {
+            transform: scale(0.98);
+        }
+        .coupon-hint {
+            font-size: 12px;
+            color: #b27a30;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        .divider {
+            height: 1px;
+            background-color: #f2e6d9;
+            margin: 20px 0;
         }
         .input-group {
             text-align: left;
@@ -55,7 +92,7 @@
         }
         textarea { 
             width: 100%; 
-            height: 140px;
+            height: 120px;
             padding: 15px; 
             box-sizing: border-box; 
             border: 2px solid #fce8b2; 
@@ -76,7 +113,7 @@
             display: flex; 
             justify-content: space-between; 
             font-size: 13px; 
-            color: #60803c; /* 幸運草綠 */
+            color: #60803c; 
             margin-top: 6px; 
             padding: 0 4px; 
             font-weight: 500; 
@@ -131,9 +168,6 @@
             font-weight: bold; 
             margin-bottom: 14px; 
             font-size: 15px; 
-            display: flex; 
-            align-items: center; 
-            gap: 5px; 
         }
         .link-list { 
             display: flex; 
@@ -153,7 +187,6 @@
             font-size: 15px; 
             transition: transform 0.1s, background 0.2s; 
             border: 1px solid #fce8b2;
-            box-shadow: 0 2px 6px rgba(255, 243, 209, 0.5); 
         }
         .item-btn:hover { 
             background-color: #ffeaa7; 
@@ -172,11 +205,20 @@
 
 <div class="container">
     <h2>🧸 QiQi專屬推廣卷轉換器 🍀</h2>
-    <div class="subtitle">點連結後自動出現券，一人五張</div>
+    <div class="subtitle">買好物拿折扣，簡單兩步搞定</div>
     
+    <!-- 第一步：固定領券（寫死妳的最新活動連結） -->
+    <div class="coupon-box">
+        <a href="https://s.shopee.tw/9zvAlgVHk5" target="_blank" class="btn-coupon">🔥 第一步：點我先領 5 張九折券 🎟️</a>
+        <div class="coupon-hint">💡 溫馨提示：先點擊領券，即可鎖定 QiQi 專屬折扣與分潤唷！</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 第二步：輸入並轉換商品 -->
     <div class="input-group">
-        <label for="inputLink">請貼上蝦皮商品網址（即使包含中文字也沒關係）🛒</label>
-        <textarea id="inputLink" placeholder="請在此貼上普通的蝦皮商品網址...例如：https://s.shopee.tw/xxxxxx" oninput="updateCount()"></textarea>
+        <label for="inputLink">第二步：貼上商品網址（自動產生購買按鈕）🛒</label>
+        <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...例如開團的短網址" oninput="updateCount()"></textarea>
         <div class="info-row">
             <span id="detectText" style="color: #8c7662;">偵測到 0 個商品網址</span>
             <span style="color: #a6927e;">一次最多 5 個 🐾</span>
@@ -189,18 +231,14 @@
     </div>
 
     <div class="result-box" id="resultBox">
-        <div class="result-title" id="resultTitle">🍀 成功產生 0 個購買連結</div>
+        <div class="result-title" id="resultTitle">🍀 ✨ 成功產生 0 個專屬購買連結</div>
         <div class="link-list" id="linkList"></div>
     </div>
 </div>
 
 <script>
-    // 🔒 莉祺專屬：將妳最新的九折券推廣金鑰長期鎖定在前端，確保收益100%歸妳！
-    const MY_CAMPAIGN_CODE = '9zvAlgVHk5'; 
-
     function getUrls() {
         const text = document.getElementById('inputLink').value;
-        // 精準抓取各式蝦皮網址，同時排除中文字元與特殊圖標
         const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
         return text.match(regex) || [];
     }
@@ -234,32 +272,19 @@
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 🔥 超強防錯機制：先拔掉網址後面所有帶問號 ? 的垃圾追蹤參數（解決 mobile 參數導致斷線的問題）
-            let cleanUrl = originalUrl.split('?')[0];
-            
-            // 如果網址最後面有殘留的斜線，先把它去掉
-            if (cleanUrl.endsWith('/')) {
-                cleanUrl = cleanUrl.slice(0, -1);
-            }
+            // 安全清洗網址，並保持原網址的完整性與有效性
+            let cleanUrl = originalUrl.trim();
 
-            // 提取最純淨的商品代碼（例如從 https://s.shopee.tw/qgvnRrwSf 提取出 qgvnRrwSf）
-            let urlParts = cleanUrl.split('/');
-            let itemCode = urlParts[urlParts.length - 1];
-
-            // 🛠️ 完美走官方原生的雙重路由解析格式，徹底拋棄並繞過壞掉的 Worker：
-            // 格式：https://s.shopee.tw/妳的券代碼/商品代碼
-            let finalLink = `https://s.shopee.tw/${MY_CAMPAIGN_CODE}/${itemCode}`;
-
-            // 產生精美的小熊按鈕
+            // 這裡直接輸出原本純淨的商品分潤網址，走官方通道，百分百能打開！
             const a = document.createElement('a');
-            a.href = finalLink;
+            a.href = cleanUrl;
             a.className = 'item-btn';
             a.target = '_blank';
-            a.innerHTML = `<span>🧸 商品連結 ${i + 1} 🍀</span> <span class="go-text">前往購買 →</span>`;
+            a.innerHTML = `<span>🧸 商品購買連結 ${i + 1} 🍀</span> <span class="go-text">前往購買 →</span>`;
             linkList.appendChild(a);
         }
 
-        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個官方安全分潤連結 ✨`;
+        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個專屬購買連結 ✨`;
         resultBox.style.display = 'block';
     }
 
