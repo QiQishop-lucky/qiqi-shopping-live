@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 QiQi好物 | 推廣轉換器 🍀</title>
+    <title>🧸 QiQi好物 | 動態推廣轉換器 🍀</title>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -42,21 +42,34 @@
             margin-bottom: 25px; 
             line-height: 1.5; 
         }
-        textarea { 
+        .input-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+        label {
+            font-size: 14px;
+            color: #7a582c;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+        }
+        input[type="text"], textarea { 
             width: 100%; 
-            height: 140px; 
-            padding: 15px; 
+            padding: 12px 15px; 
             box-sizing: border-box; 
             border: 2px solid #fce8b2; 
             border-radius: 16px; 
-            resize: none; 
             font-size: 15px; 
             line-height: 1.5; 
             outline: none; 
             transition: all 0.2s; 
             background-color: #fffdf9; 
         }
-        textarea:focus { 
+        textarea {
+            height: 120px;
+            resize: none;
+        }
+        input[type="text"]:focus, textarea:focus { 
             border-color: #ffd166; 
             background-color: #fff; 
             box-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
@@ -66,20 +79,15 @@
             justify-content: space-between; 
             font-size: 13px; 
             color: #60803c; /* 幸運草綠 */
-            margin-top: 10px; 
+            margin-top: 6px; 
             padding: 0 4px; 
             font-weight: 500; 
-        }
-        .max-hint { 
-            color: #a6927e; 
-            font-weight: normal; 
         }
         .btn-group { 
             display: flex; 
             gap: 12px; 
-            margin-top: 18px; 
+            margin-top: 22px; 
         }
-        /* 亮黃色主要按鈕 */
         .btn-main { 
             background-color: #ffd166; 
             color: #6b4d24; 
@@ -111,7 +119,6 @@
         .btn-clear:hover { 
             background-color: #ebdcb9; 
         }
-        /* 結果方框 */
         .result-box { 
             display: none; 
             margin-top: 22px; 
@@ -135,7 +142,6 @@
             flex-direction: column; 
             gap: 12px; 
         }
-        /* 商品按鈕風格 */
         .item-btn { 
             display: flex; 
             justify-content: space-between; 
@@ -168,13 +174,20 @@
 
 <div class="container">
     <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
-    <div class="subtitle">點連結後自動出現券，一人五張</div>
+    <div class="subtitle">動態活動追蹤轉換面板</div>
     
-    <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...（就算夾帶中文字也沒關係喔！）" oninput="updateCount()"></textarea>
-    
-    <div class="info-row">
-        <span id="detectText" style="color: #8c7662;">偵測到 0 個蝦皮網址</span>
-        <span class="max-hint">一次最多 5 個 🐾</span>
+    <div class="input-group">
+        <label for="campaignLink">1. 貼上當下的【領券活動推廣連結】🔥</label>
+        <input type="text" id="campaignLink" placeholder="例如：https://s.shopee.tw/9zvAlgVHk5">
+    </div>
+
+    <div class="input-group">
+        <label for="inputLink">2. 貼上【商品網址】（可夾帶中文字）🛒</label>
+        <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...一次最多轉5個網址喔！" oninput="updateCount()"></textarea>
+        <div class="info-row">
+            <span id="detectText" style="color: #8c7662;">偵測到 0 個商品網址</span>
+            <span style="color: #a6927e;">一次最多 5 個 🐾</span>
+        </div>
     </div>
 
     <div class="btn-group">
@@ -189,13 +202,12 @@
 </div>
 
 <script>
-    // 重新回歸最正確的 Worker 路徑
+    // 綁定莉祺專屬的 Cloudflare Worker 基礎網址
     const BASE_WORKER_URL = 'https://shopee.ping01070107.workers.dev'; 
 
     function getUrls() {
         const text = document.getElementById('inputLink').value;
-        // 正規表達式：精準抓取文字堆中所有類型的蝦皮連結
-        const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee|s\.shopee\.tw)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
+        const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
         return text.match(regex) || [];
     }
 
@@ -203,22 +215,28 @@
         const urls = getUrls();
         const detectText = document.getElementById('detectText');
         if (urls.length > 0) {
-            detectText.innerText = `偵測到 ${urls.length} 個蝦皮網址 🍀`;
+            detectText.innerText = `偵測到 ${urls.length} 個商品網址 🍀`;
             detectText.style.color = '#60803c';
         } else {
-            detectText.innerText = `偵測到 0 個蝦皮網址`;
+            detectText.innerText = `偵測到 0 個商品網址`;
             detectText.style.color = '#8c7662';
         }
     }
 
     function convertLinks() {
+        const campaignLink = document.getElementById('campaignLink').value.trim();
         const urls = getUrls();
         const resultBox = document.getElementById('resultBox');
         const linkList = document.getElementById('linkList');
         const resultTitle = document.getElementById('resultTitle');
 
+        if (!campaignLink) {
+            alert('請先貼上當下最新的領券活動推廣連結喔！🧸');
+            return;
+        }
+
         if (urls.length === 0) {
-            alert('請先貼上有效的蝦皮商品網址喔！🧸');
+            alert('請先貼上有效的商品網址喔！🛒');
             return;
         }
 
@@ -228,12 +246,12 @@
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 【核心修正】採用標準 Worker 斜線拼接模式：
-            // 例如：https://shopee.ping01070107.workers.dev/https://s.shopee.tw/7fXFrPd2c3
-            // 這樣會直接觸發妳的 Worker 後台去做短網址還原，並百分之百跳轉到蝦皮！
-            let finalLink = `${BASE_WORKER_URL}/${originalUrl}`;
+            // 【核心動態設計】：
+            // 我們把「最新活動短網址」跟「商品網址」用問號串在一起，直接丟給 Worker！
+            // 格式會變成： 妳的Worker/商品網址?campaign=活動短網址
+            // 這樣一來，不管蝦皮活動連結怎麼變，妳都不需要再去動 Worker 後台程式碼了！
+            let finalLink = `${BASE_WORKER_URL}/${originalUrl}?campaign=${encodeURIComponent(campaignLink)}`;
 
-            // 建立奶油黃色調的小熊商品連結按鈕
             const a = document.createElement('a');
             a.href = finalLink;
             a.className = 'item-btn';
@@ -242,12 +260,13 @@
             linkList.appendChild(a);
         }
 
-        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個分潤購買連結 ✨`;
+        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個動態分潤購買連結 ✨`;
         resultBox.style.display = 'block';
     }
 
     function clearAll() {
         document.getElementById('inputLink').value = '';
+        document.getElementById('campaignLink').value = '';
         document.getElementById('resultBox').style.display = 'none';
         document.getElementById('linkList').innerHTML = '';
         updateCount();
