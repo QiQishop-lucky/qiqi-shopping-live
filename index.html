@@ -1,245 +1,58 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 QiQi專屬推廣卷轉換器 🍀</title>
-    <style>
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #fefaf0; /* 溫柔奶黃色背景 */
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 20px; 
-            box-sizing: border-box; 
-        }
-        .container { 
-            background: #ffffff; 
-            padding: 30px; 
-            border-radius: 24px; 
-            box-shadow: 0 8px 24px rgba(222, 184, 135, 0.2); 
-            width: 100%; 
-            max-width: 450px; 
-            text-align: center;
-            border: 2px solid #fce8b2; 
-        }
-        h2 { 
-            color: #b27a30; /* 溫暖焦糖棕 */
-            margin: 0 0 8px 0; 
-            font-size: 22px; 
-            font-weight: bold; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        .subtitle { 
-            color: #8c7662; 
-            font-size: 14px; 
-            margin-bottom: 25px; 
-            line-height: 1.5; 
-        }
-        .input-group {
-            text-align: left;
-            margin-bottom: 18px;
-        }
-        label {
-            font-size: 14px;
-            color: #7a582c;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-        }
-        textarea { 
-            width: 100%; 
-            height: 140px; 
-            padding: 15px; 
-            box-sizing: border-box; 
-            border: 2px solid #fce8b2; 
-            border-radius: 16px; 
-            font-size: 15px; 
-            line-height: 1.5; 
-            outline: none; 
-            transition: all 0.2s; 
-            background-color: #fffdf9; 
-            resize: none;
-        }
-        textarea:focus { 
-            border-color: #ffd166; 
-            background-color: #fff; 
-            box-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
-        }
-        .btn-group { 
-            display: flex; 
-            gap: 12px; 
-            margin-top: 22px; 
-        }
-        .btn-main { 
-            background-color: #ffd166; 
-            color: #6b4d24; 
-            border: none; 
-            padding: 14px; 
-            flex: 2; 
-            border-radius: 14px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold; 
-            transition: all 0.2s; 
-            box-shadow: 0 4px 10px rgba(255, 209, 102, 0.3); 
-        }
-        .btn-main:hover { 
-            background-color: #ffca47; 
-        }
-        .btn-clear { 
-            background-color: #f5eedc; 
-            color: #8c7662; 
-            border: none; 
-            padding: 14px; 
-            flex: 1; 
-            border-radius: 14px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold; 
-            transition: background 0.2s; 
-        }
-        .btn-clear:hover { 
-            background-color: #ebdcb9; 
-        }
-        .result-box { 
-            display: none; 
-            margin-top: 22px; 
-            padding: 18px; 
-            background-color: #f7f9f2; 
-            border: 2px dashed #c2d6a4; 
-            border-radius: 16px; 
-            text-align: left; 
-        }
-        .result-title { 
-            color: #4a662f; 
-            font-weight: bold; 
-            margin-bottom: 14px; 
-            font-size: 15px; 
-        }
-        .link-item {
-            background-color: #fff3d1;
-            border: 1px solid #fce8b2;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .link-text {
-            font-size: 13px;
-            color: #4a662f;
-            word-break: break-all;
-            background: #ffffff;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #ebdcb9;
-        }
-        .btn-copy {
-            background-color: #ffb84d;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-            align-self: flex-end;
-        }
-        .btn-copy:hover {
-            background-color: #e6a43e;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h2>🧸 QiQi專屬推廣卷轉換器 🍀</h2>
-    <div class="subtitle">輸入顧客傳來的商品連結，一秒生成「領券＋購買」神奇連結</div>
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
     
-    <div class="input-group">
-        <label for="inputLink">請貼上顧客傳給妳的蝦皮商品網址 🛒</label>
-        <textarea id="inputLink" placeholder="在此貼上任何蝦皮商品連結...（就算整段對話包含中文字貼進來也找得到網址喔！）"></textarea>
-    </div>
+    // 🔒 祺祺專屬：鎖定妳當下最強的一人五張九折券活動代碼
+    const MY_CAMPAIGN_CODE = "9zvAlgVHk5"; 
+    const CAMPAIGN_URL = `https://s.shopee.tw/${MY_CAMPAIGN_CODE}`;
 
-    <div class="btn-group">
-        <button class="btn-main" onclick="convertLinks()">🍀 產生轉換連結 🧸</button>
-        <button class="btn-clear" onclick="clearAll()">清除</button>
-    </div>
-
-    <div class="result-box" id="resultBox">
-        <div class="result-title" id="resultTitle">✨ 成功生成專屬連結！複製後傳回給顧客：</div>
-        <div id="linkList"></div>
-    </div>
-</div>
-
-<script>
-    // 🔒 莉祺的最新九折券專屬活動短網址
-    const CAMPAIGN_URL = 'https://s.shopee.tw/9zvAlgVHk5'; 
-
-    function getUrls() {
-        const text = document.getElementById('inputLink').value;
-        const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
-        return text.match(regex) || [];
+    // 取得粉絲原本要買的商品網址（去掉網址最前面的斜線）
+    let targetUrl = url.pathname.slice(1);
+    
+    // 如果網址後面有帶問號參數，把它們補回來
+    if (url.search) {
+      targetUrl += url.search;
     }
 
-    function convertLinks() {
-        const urls = getUrls();
-        const resultBox = document.getElementById('resultBox');
-        const linkList = document.getElementById('linkList');
+    // 如果沒有帶任何商品網址，就讓它直接去領券頁面
+    if (!targetUrl || !targetUrl.startsWith('http')) {
+      return Response.redirect(CAMPAIGN_URL, 302);
+    }
 
-        if (urls.length === 0) {
-            alert('請先貼上有效的蝦皮商品網址喔！🛒');
-            return;
-        }
-
-        linkList.innerHTML = '';
-        const maxLinks = Math.min(urls.length, 5);
+    // 🛠️ 網紅專屬重定向魔法：
+    // 先讓粉絲的瀏覽器吃下妳的活動領券 Cookie（鎖定業績），並在 0.5 秒後自動跳轉商品！
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>🧸 QiQi好物轉跳中... 🍀</title>
+        <style>
+          body { font-family: sans-serif; text-align: center; background: #fefaf0; padding-top: 50px; color: #7a582c; }
+          .loader { border: 4px solid #f3f3f3; border-top: 4px solid #ffd166; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        </style>
+      </head>
+      <body>
+        <h3>🧸 正在為您啟動專屬 9 折優惠券... 🍀</h3>
+        <div class="loader"></div>
+        <p>即將前往商品頁面，請稍候 💖</p>
         
-        for (let i = 0; i < maxLinks; i++) {
-            let originalUrl = urls[i];
-            
-            // 🛠️ 蝦皮官方標準重定向跳轉規則：
-            // 將顧客傳來的商品網址進行標準網址編碼 (URL Encode)
-            // 做為參數附加在妳的活動網址後面，利用官方 redir 參數實現「領券後跳轉商品」
-            let encodedProductUrl = encodeURIComponent(originalUrl);
-            let finalLink = `${CAMPAIGN_URL}?redir=${encodedProductUrl}`;
+        <iframe src="${CAMPAIGN_URL}" style="display:none; width:0; height:0; border:0;"></iframe>
+        
+        <script>
+          // 鎖定分潤後，半秒鐘立刻無縫切換到商品，絕不卡品客洋芋片！
+          setTimeout(function() {
+            window.location.href = "${targetUrl}";
+          }, 500);
+        </script>
+      </body>
+      </html>
+    `;
 
-            // 建立顯示與複製的區塊
-            const div = document.createElement('div');
-            div.className = 'link-item';
-            div.innerHTML = `
-                <div class="link-text" id="linkText_${i}">${finalLink}</div>
-                <button class="btn-copy" onclick="copyToClipboard('linkText_${i}')">複製此連結</button>
-            `;
-            linkList.appendChild(div);
-        }
-
-        resultBox.style.display = 'block';
-    }
-
-    function copyToClipboard(elementId) {
-        const text = document.getElementById(elementId).innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('🎉 複製成功！快去對話框貼給顧客吧！🧸🍀');
-        }).catch(err => {
-            alert('複製失敗，請手動選取網址複製喔！');
-        });
-    }
-
-    function clearAll() {
-        document.getElementById('inputLink').value = '';
-        document.getElementById('resultBox').style.display = 'none';
-        document.getElementById('linkList').innerHTML = '';
-    }
-</script>
-
-</body>
-</html>
+    return new Response(html, {
+      headers: { "Content-Type": "text/html;charset=UTF-8" }
+    });
+  }
+};
