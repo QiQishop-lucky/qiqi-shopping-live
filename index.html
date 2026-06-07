@@ -39,45 +39,8 @@
         .subtitle { 
             color: #8c7662; 
             font-size: 14px; 
-            margin-bottom: 20px; 
-            line-line: 1.5; 
-        }
-        /* 領券大按鈕區 */
-        .coupon-box {
-            background-color: #fff5e6;
-            border: 2px dashed #ffb84d;
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 25px;
-        }
-        .btn-coupon {
-            display: block;
-            background-color: #ff9900;
-            color: white;
-            text-decoration: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 16px;
-            box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
-            transition: transform 0.1s, background 0.2s;
-        }
-        .btn-coupon:hover {
-            background-color: #e68a00;
-        }
-        .btn-coupon:active {
-            transform: scale(0.98);
-        }
-        .coupon-hint {
-            font-size: 12px;
-            color: #b27a30;
-            margin-top: 8px;
-            font-weight: 500;
-        }
-        .divider {
-            height: 1px;
-            background-color: #f2e6d9;
-            margin: 20px 0;
+            margin-bottom: 25px; 
+            line-height: 1.5; 
         }
         .input-group {
             text-align: left;
@@ -92,7 +55,7 @@
         }
         textarea { 
             width: 100%; 
-            height: 120px;
+            height: 140px; 
             padding: 15px; 
             box-sizing: border-box; 
             border: 2px solid #fce8b2; 
@@ -108,15 +71,6 @@
             border-color: #ffd166; 
             background-color: #fff; 
             box-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
-        }
-        .info-row { 
-            display: flex; 
-            justify-content: space-between; 
-            font-size: 13px; 
-            color: #60803c; 
-            margin-top: 6px; 
-            padding: 0 4px; 
-            font-weight: 500; 
         }
         .btn-group { 
             display: flex; 
@@ -169,35 +123,38 @@
             margin-bottom: 14px; 
             font-size: 15px; 
         }
-        .link-list { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-        }
-        .item-btn { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            background-color: #fff3d1; 
-            color: #7a582c; 
-            text-decoration: none; 
-            padding: 14px 18px; 
-            border-radius: 12px; 
-            font-weight: bold; 
-            font-size: 15px; 
-            transition: transform 0.1s, background 0.2s; 
+        .link-item {
+            background-color: #fff3d1;
             border: 1px solid #fce8b2;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
-        .item-btn:hover { 
-            background-color: #ffeaa7; 
+        .link-text {
+            font-size: 13px;
+            color: #4a662f;
+            word-break: break-all;
+            background: #ffffff;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ebdcb9;
         }
-        .item-btn:active { 
-            transform: scale(0.98); 
+        .btn-copy {
+            background-color: #ffb84d;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            align-self: flex-end;
         }
-        .item-btn .go-text { 
-            font-size: 13px; 
-            color: #b27a30; 
-            font-weight: bold; 
+        .btn-copy:hover {
+            background-color: #e6a43e;
         }
     </style>
 </head>
@@ -205,24 +162,11 @@
 
 <div class="container">
     <h2>🧸 QiQi專屬推廣卷轉換器 🍀</h2>
-    <div class="subtitle">買好物拿折扣，簡單兩步搞定</div>
+    <div class="subtitle">輸入顧客傳來的商品連結，一秒生成「領券＋購買」神奇連結</div>
     
-    <!-- 第一步：固定領券（寫死妳的最新活動連結） -->
-    <div class="coupon-box">
-        <a href="https://s.shopee.tw/9zvAlgVHk5" target="_blank" class="btn-coupon">🔥 第一步：點我先領 5 張九折券 🎟️</a>
-        <div class="coupon-hint">💡 溫馨提示：先點擊領券，即可鎖定 QiQi 專屬折扣與分潤唷！</div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- 第二步：輸入並轉換商品 -->
     <div class="input-group">
-        <label for="inputLink">第二步：貼上商品網址（自動產生購買按鈕）🛒</label>
-        <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...例如開團的短網址" oninput="updateCount()"></textarea>
-        <div class="info-row">
-            <span id="detectText" style="color: #8c7662;">偵測到 0 個商品網址</span>
-            <span style="color: #a6927e;">一次最多 5 個 🐾</span>
-        </div>
+        <label for="inputLink">請貼上顧客傳給妳的蝦皮商品網址 🛒</label>
+        <textarea id="inputLink" placeholder="在此貼上任何蝦皮商品連結...（就算整段對話包含中文字貼進來也找得到網址喔！）"></textarea>
     </div>
 
     <div class="btn-group">
@@ -231,35 +175,25 @@
     </div>
 
     <div class="result-box" id="resultBox">
-        <div class="result-title" id="resultTitle">🍀 ✨ 成功產生 0 個專屬購買連結</div>
-        <div class="link-list" id="linkList"></div>
+        <div class="result-title" id="resultTitle">✨ 成功生成專屬連結！複製後傳回給顧客：</div>
+        <div id="linkList"></div>
     </div>
 </div>
 
 <script>
+    // 🔒 莉祺的最新九折券專屬活動短網址
+    const CAMPAIGN_URL = 'https://s.shopee.tw/9zvAlgVHk5'; 
+
     function getUrls() {
         const text = document.getElementById('inputLink').value;
         const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
         return text.match(regex) || [];
     }
 
-    function updateCount() {
-        const urls = getUrls();
-        const detectText = document.getElementById('detectText');
-        if (urls.length > 0) {
-            detectText.innerText = `偵測到 ${urls.length} 個商品網址 🍀`;
-            detectText.style.color = '#60803c';
-        } else {
-            detectText.innerText = `偵測到 0 個商品網址`;
-            detectText.style.color = '#8c7662';
-        }
-    }
-
     function convertLinks() {
         const urls = getUrls();
         const resultBox = document.getElementById('resultBox');
         const linkList = document.getElementById('linkList');
-        const resultTitle = document.getElementById('resultTitle');
 
         if (urls.length === 0) {
             alert('請先貼上有效的蝦皮商品網址喔！🛒');
@@ -272,27 +206,38 @@
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 安全清洗網址，並保持原網址的完整性與有效性
-            let cleanUrl = originalUrl.trim();
+            // 🛠️ 蝦皮官方標準重定向跳轉規則：
+            // 將顧客傳來的商品網址進行標準網址編碼 (URL Encode)
+            // 做為參數附加在妳的活動網址後面，利用官方 redir 參數實現「領券後跳轉商品」
+            let encodedProductUrl = encodeURIComponent(originalUrl);
+            let finalLink = `${CAMPAIGN_URL}?redir=${encodedProductUrl}`;
 
-            // 這裡直接輸出原本純淨的商品分潤網址，走官方通道，百分百能打開！
-            const a = document.createElement('a');
-            a.href = cleanUrl;
-            a.className = 'item-btn';
-            a.target = '_blank';
-            a.innerHTML = `<span>🧸 商品購買連結 ${i + 1} 🍀</span> <span class="go-text">前往購買 →</span>`;
-            linkList.appendChild(a);
+            // 建立顯示與複製的區塊
+            const div = document.createElement('div');
+            div.className = 'link-item';
+            div.innerHTML = `
+                <div class="link-text" id="linkText_${i}">${finalLink}</div>
+                <button class="btn-copy" onclick="copyToClipboard('linkText_${i}')">複製此連結</button>
+            `;
+            linkList.appendChild(div);
         }
 
-        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個專屬購買連結 ✨`;
         resultBox.style.display = 'block';
+    }
+
+    function copyToClipboard(elementId) {
+        const text = document.getElementById(elementId).innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('🎉 複製成功！快去對話框貼給顧客吧！🧸🍀');
+        }).catch(err => {
+            alert('複製失敗，請手動選取網址複製喔！');
+        });
     }
 
     function clearAll() {
         document.getElementById('inputLink').value = '';
         document.getElementById('resultBox').style.display = 'none';
         document.getElementById('linkList').innerHTML = '';
-        updateCount();
     }
 </script>
 
