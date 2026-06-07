@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 QiQi好物 | 動態推廣轉換器 🍀</title>
+    <title>🧸 QiQi好物 | 免Worker推廣轉換器 🍀</title>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -174,7 +174,7 @@
 
 <div class="container">
     <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
-    <div class="subtitle">動態活動追蹤轉換面板</div>
+    <div class="subtitle">自動領券商品轉換器（免後台版）</div>
     
     <div class="input-group">
         <label for="campaignLink">1. 貼上當下的【領券活動推廣連結】🔥</label>
@@ -183,7 +183,7 @@
 
     <div class="input-group">
         <label for="inputLink">2. 貼上【商品網址】（可夾帶中文字）🛒</label>
-        <textarea id="inputLink" placeholder="請在此貼上蝦皮商品網址...一次最多轉5個網址喔！" oninput="updateCount()"></textarea>
+        <textarea id="inputLink" placeholder="請在此貼上普通蝦皮商品網址...（例如：https://s.shopee.tw/xxxxxx）" oninput="updateCount()"></textarea>
         <div class="info-row">
             <span id="detectText" style="color: #8c7662;">偵測到 0 個商品網址</span>
             <span style="color: #a6927e;">一次最多 5 個 🐾</span>
@@ -202,9 +202,6 @@
 </div>
 
 <script>
-    // 綁定莉祺專屬的 Cloudflare Worker 基礎網址
-    const BASE_WORKER_URL = 'https://shopee.ping01070107.workers.dev'; 
-
     function getUrls() {
         const text = document.getElementById('inputLink').value;
         const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
@@ -224,7 +221,7 @@
     }
 
     function convertLinks() {
-        const campaignLink = document.getElementById('campaignLink').value.trim();
+        let campaignLink = document.getElementById('campaignLink').value.trim();
         const urls = getUrls();
         const resultBox = document.getElementById('resultBox');
         const linkList = document.getElementById('linkList');
@@ -240,17 +237,27 @@
             return;
         }
 
+        // 確保活動連結格式乾淨
+        if (campaignLink.endsWith('/')) {
+            campaignLink = campaignLink.slice(0, -1);
+        }
+
         linkList.innerHTML = '';
         const maxLinks = Math.min(urls.length, 5);
         
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 【核心動態設計】：
-            // 我們把「最新活動短網址」跟「商品網址」用問號串在一起，直接丟給 Worker！
-            // 格式會變成： 妳的Worker/商品網址?campaign=活動短網址
-            // 這樣一來，不管蝦皮活動連結怎麼變，妳都不需要再去動 Worker 後台程式碼了！
-            let finalLink = `${BASE_WORKER_URL}/${originalUrl}?campaign=${encodeURIComponent(campaignLink)}`;
+            // 提取商品網址最後一截的識別碼（例如 https://s.shopee.tw/abcdef 提取出 abcdef）
+            let urlParts = originalUrl.split('/');
+            let itemCode = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2];
+            // 移除可能夾帶的參數
+            itemCode = itemCode.split('?')[0];
+
+            // 【終極純前端對接技術】：
+            // 利用官方 Deeplink 繞道規則，直接把商品識別碼做為子路徑，後面再用 smtt 重定向傳導
+            // 最終格式：https://s.shopee.tw/最新活動碼/商品碼?smtt=...
+            let finalLink = `${campaignLink}/${itemCode}?smtt=0.0.9`;
 
             const a = document.createElement('a');
             a.href = finalLink;
@@ -260,7 +267,7 @@
             linkList.appendChild(a);
         }
 
-        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個動態分潤購買連結 ✨`;
+        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個分潤購買連結 ✨`;
         resultBox.style.display = 'block';
     }
 
