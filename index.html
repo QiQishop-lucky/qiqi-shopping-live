@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 QiQi好物 | 推廣轉換器 🍀</title>
+    <title>🧸 QiQi專屬推廣卷轉換器 🍀</title>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #fefaf0; 
+            background-color: #fefaf0; /* 溫柔奶黃色背景 */
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -27,7 +27,7 @@
             border: 2px solid #fce8b2; 
         }
         h2 { 
-            color: #b27a30; 
+            color: #b27a30; /* 溫暖焦糖棕 */
             margin: 0 0 8px 0; 
             font-size: 22px; 
             font-weight: bold; 
@@ -51,11 +51,12 @@
             color: #7a582c;
             font-weight: bold;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
-        input[type="text"], textarea { 
+        textarea { 
             width: 100%; 
-            padding: 12px 15px; 
+            height: 140px;
+            padding: 15px; 
             box-sizing: border-box; 
             border: 2px solid #fce8b2; 
             border-radius: 16px; 
@@ -64,12 +65,9 @@
             outline: none; 
             transition: all 0.2s; 
             background-color: #fffdf9; 
-        }
-        textarea {
-            height: 120px;
             resize: none;
         }
-        input[type="text"]:focus, textarea:focus { 
+        textarea:focus { 
             border-color: #ffd166; 
             background-color: #fff; 
             box-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
@@ -78,7 +76,7 @@
             display: flex; 
             justify-content: space-between; 
             font-size: 13px; 
-            color: #60803c; 
+            color: #60803c; /* 幸運草綠 */
             margin-top: 6px; 
             padding: 0 4px; 
             font-weight: 500; 
@@ -173,17 +171,12 @@
 <body>
 
 <div class="container">
-    <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
-    <div class="subtitle">自動領券商品轉換器（純官方安全版）</div>
+    <h2>🧸 QiQi專屬推廣卷轉換器 🍀</h2>
+    <div class="subtitle">點連結後自動出現券，一人五張</div>
     
     <div class="input-group">
-        <label for="campaignLink">1. 貼上當下的【領券活動推廣連結】🔥</label>
-        <input type="text" id="campaignLink" placeholder="例如：https://s.shopee.tw/9zvAlgVHk5">
-    </div>
-
-    <div class="input-group">
-        <label for="inputLink">2. 貼上【商品網址】🛒</label>
-        <textarea id="inputLink" placeholder="請貼上普通的蝦皮商品網址..." oninput="updateCount()"></textarea>
+        <label for="inputLink">請貼上蝦皮商品網址（即使包含中文字也沒關係）🛒</label>
+        <textarea id="inputLink" placeholder="請在此貼上普通的蝦皮商品網址...例如：https://s.shopee.tw/xxxxxx" oninput="updateCount()"></textarea>
         <div class="info-row">
             <span id="detectText" style="color: #8c7662;">偵測到 0 個商品網址</span>
             <span style="color: #a6927e;">一次最多 5 個 🐾</span>
@@ -202,8 +195,12 @@
 </div>
 
 <script>
+    // 🔒 莉祺專屬：將妳最新的九折券推廣金鑰長期鎖定在前端，確保收益100%歸妳！
+    const MY_CAMPAIGN_CODE = '9zvAlgVHk5'; 
+
     function getUrls() {
         const text = document.getElementById('inputLink').value;
+        // 精準抓取各式蝦皮網址，同時排除中文字元與特殊圖標
         const regex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.tw|shp\.ee)\/[^\s\u4e00-\u9fa5🛒→]+)/g;
         return text.match(regex) || [];
     }
@@ -221,24 +218,14 @@
     }
 
     function convertLinks() {
-        let campaignLink = document.getElementById('campaignLink').value.trim();
         const urls = getUrls();
         const resultBox = document.getElementById('resultBox');
         const linkList = document.getElementById('linkList');
         const resultTitle = document.getElementById('resultTitle');
 
-        if (!campaignLink) {
-            alert('請先貼上當下最新的領券活動推廣連結喔！🧸');
-            return;
-        }
-
         if (urls.length === 0) {
-            alert('請先貼上有效的商品網址喔！🛒');
+            alert('請先貼上有效的蝦皮商品網址喔！🛒');
             return;
-        }
-
-        if (campaignLink.endsWith('/')) {
-            campaignLink = campaignLink.slice(0, -1);
         }
 
         linkList.innerHTML = '';
@@ -247,16 +234,23 @@
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 精準提取商品短網址後面那串唯一的亂碼識別碼
-            let urlParts = originalUrl.split('/');
-            let itemCode = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2];
-            itemCode = itemCode.split('?')[0];
+            // 🔥 超強防錯機制：先拔掉網址後面所有帶問號 ? 的垃圾追蹤參數（解決 mobile 參數導致斷線的問題）
+            let cleanUrl = originalUrl.split('?')[0];
+            
+            // 如果網址最後面有殘留的斜線，先把它去掉
+            if (cleanUrl.endsWith('/')) {
+                cleanUrl = cleanUrl.slice(0, -1);
+            }
 
-            // 🛠️ 完全不走 Worker！直接利用蝦皮官方短網址多重路徑解析規則：
-            // 活動短網址 + 商品短網址碼 
-            // 產生的新網址會長這樣：https://s.shopee.tw/9zvAlgVHk5/abcdef
-            let finalLink = `${campaignLink}/${itemCode}`;
+            // 提取最純淨的商品代碼（例如從 https://s.shopee.tw/qgvnRrwSf 提取出 qgvnRrwSf）
+            let urlParts = cleanUrl.split('/');
+            let itemCode = urlParts[urlParts.length - 1];
 
+            // 🛠️ 完美走官方原生的雙重路由解析格式，徹底拋棄並繞過壞掉的 Worker：
+            // 格式：https://s.shopee.tw/妳的券代碼/商品代碼
+            let finalLink = `https://s.shopee.tw/${MY_CAMPAIGN_CODE}/${itemCode}`;
+
+            // 產生精美的小熊按鈕
             const a = document.createElement('a');
             a.href = finalLink;
             a.className = 'item-btn';
@@ -265,13 +259,12 @@
             linkList.appendChild(a);
         }
 
-        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個官方安全購買連結 ✨`;
+        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個官方安全分潤連結 ✨`;
         resultBox.style.display = 'block';
     }
 
     function clearAll() {
         document.getElementById('inputLink').value = '';
-        document.getElementById('campaignLink').value = '';
         document.getElementById('resultBox').style.display = 'none';
         document.getElementById('linkList').innerHTML = '';
         updateCount();
