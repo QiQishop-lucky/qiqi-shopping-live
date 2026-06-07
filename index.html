@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧸 QiQi好物 | 免Worker推廣轉換器 🍀</title>
+    <title>🧸 QiQi好物 | 推廣轉換器 🍀</title>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #fefaf0; /* 溫柔奶黃色背景 */
+            background-color: #fefaf0; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -27,7 +27,7 @@
             border: 2px solid #fce8b2; 
         }
         h2 { 
-            color: #b27a30; /* 溫暖焦糖棕 */
+            color: #b27a30; 
             margin: 0 0 8px 0; 
             font-size: 22px; 
             font-weight: bold; 
@@ -78,7 +78,7 @@
             display: flex; 
             justify-content: space-between; 
             font-size: 13px; 
-            color: #60803c; /* 幸運草綠 */
+            color: #60803c; 
             margin-top: 6px; 
             padding: 0 4px; 
             font-weight: 500; 
@@ -174,7 +174,7 @@
 
 <div class="container">
     <h2>🧸 ✨ 祺祺好物 ✨ 🍀</h2>
-    <div class="subtitle">自動領券商品轉換器（免後台版）</div>
+    <div class="subtitle">自動領券商品轉換器（純官方安全版）</div>
     
     <div class="input-group">
         <label for="campaignLink">1. 貼上當下的【領券活動推廣連結】🔥</label>
@@ -182,8 +182,8 @@
     </div>
 
     <div class="input-group">
-        <label for="inputLink">2. 貼上【商品網址】（可夾帶中文字）🛒</label>
-        <textarea id="inputLink" placeholder="請在此貼上普通蝦皮商品網址...（例如：https://s.shopee.tw/xxxxxx）" oninput="updateCount()"></textarea>
+        <label for="inputLink">2. 貼上【商品網址】🛒</label>
+        <textarea id="inputLink" placeholder="請貼上普通的蝦皮商品網址..." oninput="updateCount()"></textarea>
         <div class="info-row">
             <span id="detectText" style="color: #8c7662;">偵測到 0 個商品網址</span>
             <span style="color: #a6927e;">一次最多 5 個 🐾</span>
@@ -237,7 +237,6 @@
             return;
         }
 
-        // 確保活動連結格式乾淨
         if (campaignLink.endsWith('/')) {
             campaignLink = campaignLink.slice(0, -1);
         }
@@ -248,16 +247,15 @@
         for (let i = 0; i < maxLinks; i++) {
             let originalUrl = urls[i];
             
-            // 提取商品網址最後一截的識別碼（例如 https://s.shopee.tw/abcdef 提取出 abcdef）
+            // 精準提取商品短網址後面那串唯一的亂碼識別碼
             let urlParts = originalUrl.split('/');
             let itemCode = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2];
-            // 移除可能夾帶的參數
             itemCode = itemCode.split('?')[0];
 
-            // 【終極純前端對接技術】：
-            // 利用官方 Deeplink 繞道規則，直接把商品識別碼做為子路徑，後面再用 smtt 重定向傳導
-            // 最終格式：https://s.shopee.tw/最新活動碼/商品碼?smtt=...
-            let finalLink = `${campaignLink}/${itemCode}?smtt=0.0.9`;
+            // 🛠️ 完全不走 Worker！直接利用蝦皮官方短網址多重路徑解析規則：
+            // 活動短網址 + 商品短網址碼 
+            // 產生的新網址會長這樣：https://s.shopee.tw/9zvAlgVHk5/abcdef
+            let finalLink = `${campaignLink}/${itemCode}`;
 
             const a = document.createElement('a');
             a.href = finalLink;
@@ -267,7 +265,7 @@
             linkList.appendChild(a);
         }
 
-        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個分潤購買連結 ✨`;
+        resultTitle.innerText = `✨ 成功產生 ${maxLinks} 個官方安全購買連結 ✨`;
         resultBox.style.display = 'block';
     }
 
